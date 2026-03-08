@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SysAdmin UI — Health Alert Panel Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:        #0D0F14;
+    --surface:   #13161E;
+    --surface2:  #1A1E28;
+    --border:    #252A38;
+    --border2:   #2E3547;
+    --text:      #E2E6F0;
+    --muted:     #6B7590;
+    --dimmed:    #3D4560;
+
+    --red:       #F04E5E;
+    --red-bg:    rgba(240,78,94,0.08);
+    --red-border:rgba(240,78,94,0.25);
+
+    --amber:     #F5A623;
+    --amber-bg:  rgba(245,166,35,0.08);
+    --amber-border:rgba(245,166,35,0.25);
+
+    --blue:      #4D9CFF;
+    --blue-bg:   rgba(77,156,255,0.08);
+    --blue-border:rgba(77,156,255,0.25);
+
+    --green:     #3DD68C;
+    --green-bg:  rgba(61,214,140,0.07);
+    --green-border:rgba(61,214,140,0.22);
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #F04E5E 0%, #F5A623 100%);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .nav { padding: 12px 0; flex: 1; }
+
+  .nav-section {
+    padding: 6px 20px 4px;
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--dimmed);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+
+  .nav-item.active {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--blue);
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--dimmed);
+    flex-shrink: 0;
+  }
+  .nav-item.active .nav-dot { background: var(--blue); }
+
+  .sidebar-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── Main ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; }
+
+  .topbar {
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+  }
+
+  .topbar-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.01em;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topbar-env {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .topbar-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4D9CFF, #3DD68C);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .content { padding: 28px; overflow-y: auto; flex: 1; }
+
+  /* ── State Tabs ── */
+  .state-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: var(--mono);
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: var(--surface);
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .tab:hover { color: var(--text); border-color: var(--border2); }
+  .tab.active { background: var(--surface2); border-color: var(--blue); color: var(--blue); }
+
+  .panel-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--dimmed);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ── Alert Panel ── */
+  .alert-panel { margin-bottom: 32px; }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .panel-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .panel-refresh {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dimmed);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Alert States ── */
+  .state-panel { display: none; }
+  .state-panel.visible { display: block; }
+
+  /* FIRING */
+  .alert-group {
+    border-radius: 6px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    border: 1px solid;
+  }
+
+  .alert-group.critical {
+    background: var(--red-bg);
+    border-color: var(--red-border);
+  }
+  .alert-group.warning {
+    background: var(--amber-bg);
+    border-color: var(--amber-border);
+  }
+  .alert-group.info {
+    background: var(--blue-bg);
+    border-color: var(--blue-border);
+  }
+
+  .alert-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .alert-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .severity-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .severity-badge.critical { background: rgba(240,78,94,0.18); color: var(--red); }
+  .severity-badge.warning  { background: rgba(245,166,35,0.18); color: var(--amber); }
+  .severity-badge.info     { background: rgba(77,156,255,0.18); color: var(--blue); }
+
+  .alert-service {
+    font-weight: 500;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .alert-summary {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .alert-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .alert-duration {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .alert-duration.critical { color: var(--red); opacity: 0.8; }
+  .alert-duration.warning  { color: var(--amber); opacity: 0.8; }
+
+  .grafana-link {
+    font-size: 11px;
+    color: var(--blue);
+    text-decoration: none;
+    font-family: var(--mono);
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .grafana-link:hover { opacity: 1; }
+
+  .expand-btn {
+    font-size: 10px;
+    color: var(--dimmed);
+    font-family: var(--mono);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .alert-sub-row {
+    border-top: 1px solid var(--border);
+    padding: 8px 14px 8px 42px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* HEALTHY */
+  .healthy-panel {
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .healthy-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .healthy-icon {
+    width: 20px; height: 20px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: #0D0F14;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .healthy-text { font-size: 13px; font-weight: 500; color: var(--green); }
+  .healthy-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
+
+  .healthy-right {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dimmed);
+    text-align: right;
+  }
+
+  /* LOADING (skeleton) */
+  .skeleton-row {
+    height: 44px;
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ERROR */
+  .error-panel {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+
+  .error-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .error-icon {
+    font-size: 14px;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+
+  .error-title  { font-size: 13px; font-weight: 500; color: var(--red); }
+  .error-detail { font-size: 12px; color: var(--muted); font-family: var(--mono); margin-bottom: 10px; }
+
+  .error-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .error-time   { font-family: var(--mono); font-size: 11px; color: var(--dimmed); }
+
+  .retry-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    background: rgba(240,78,94,0.1);
+    border: 1px solid var(--red-border);
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .retry-btn:hover { background: rgba(240,78,94,0.18); }
+
+  /* ── Page grid below panel ── */
+  .page-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .widget {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+
+  .widget-title {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--dimmed);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+
+  .metric-val {
+    font-size: 28px;
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .metric-unit {
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+
+  .metric-delta {
+    font-size: 11px;
+    font-family: var(--mono);
+    margin-top: 6px;
+  }
+  .metric-delta.up   { color: var(--green); }
+  .metric-delta.down { color: var(--red); }
+  .metric-delta.flat { color: var(--muted); }
+
+  .bar-chart { margin-top: 8px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .bar-label { font-family: var(--mono); font-size: 11px; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .bar-fill  { height: 100%; border-radius: 3px; }
+  .bar-pct   { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 36px; text-align: right; }
+
+  /* Divider */
+  .divider {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--dimmed);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 24px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Pulse dot */
+  .pulse-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 6px;
+    animation: pulse-anim 2s ease-in-out infinite;
+  }
+  @keyframes pulse-anim {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">SA</div>
+      <div>
+        <div class="logo-text">SysAdmin</div>
+        <div class="logo-sub">PLATFORM OPS</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active"><div class="nav-dot"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-dot"></div>Alerts</div>
+      <div class="nav-section">Infrastructure</div>
+      <div class="nav-item"><div class="nav-dot"></div>Kubernetes</div>
+      <div class="nav-item"><div class="nav-dot"></div>Services</div>
+      <div class="nav-item"><div class="nav-dot"></div>Nodes</div>
+      <div class="nav-section">Observability</div>
+      <div class="nav-item"><div class="nav-dot"></div>Grafana</div>
+      <div class="nav-item"><div class="nav-dot"></div>Logs</div>
+      <div class="nav-item"><div class="nav-dot"></div>Traces</div>
+      <div class="nav-section">Platform</div>
+      <div class="nav-item"><div class="nav-dot"></div>Security</div>
+      <div class="nav-item"><div class="nav-dot"></div>Settings</div>
+    </nav>
+    <div class="sidebar-footer">
+      <span class="pulse-dot"></span>RKE2 · PROD-CA-01
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="topbar-env">● PROD</div>
+        <div class="topbar-time" id="clock">--:--:--</div>
+        <div class="avatar">JS</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- State switcher -->
+      <div class="state-tabs">
+        <div class="tab active" onclick="showState('firing')">firing state</div>
+        <div class="tab" onclick="showState('healthy')">healthy state</div>
+        <div class="tab" onclick="showState('loading')">loading state</div>
+        <div class="tab" onclick="showState('error')">error state</div>
+      </div>
+
+      <!-- ── ALERT PANEL (top of page — Solution section) ── -->
+      <div class="alert-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            System Health
+            <span class="panel-count" id="panel-count">2 active issues</span>
+          </div>
+          <div class="panel-refresh" id="panel-refresh">↻ refreshes in 60s</div>
+        </div>
+
+        <!-- STATE: FIRING -->
+        <div class="state-panel visible" id="state-firing">
+          <div class="panel-label">alert panel — firing</div>
+
+          <!-- Critical group -->
+          <div class="alert-group critical">
+            <div class="alert-row">
+              <div class="alert-left">
+                <span class="severity-badge critical">critical</span>
+                <span class="alert-service">ingest-api</span>
+                <span class="alert-summary">Error rate &gt; 2% for 5 minutes</span>
+              </div>
+              <div class="alert-right">
+                <span class="alert-duration critical">firing 14m</span>
+                <span class="grafana-link">View in Grafana ↗</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Warning group with expansion -->
+          <div class="alert-group warning">
+            <div class="alert-row">
+              <div class="alert-left">
+                <span class="severity-badge warning">warning</span>
+                <span class="alert-service">data-pipeline</span>
+                <span class="alert-summary">Job lag &gt; 90s on enrichment stage</span>
+              </div>
+              <div class="alert-right">
+                <span class="alert-duration warning">firing 2h 3m</span>
+                <span class="grafana-link">View in Grafana ↗</span>
+                <button class="expand-btn" onclick="toggleExpand(this)">▼ +2 more</button>
+              </div>
+            </div>
+            <div class="alert-sub-rows" style="display:none;">
+              <div class="alert-sub-row">
+                <span><strong>HighJobLag</strong> — enrichment-worker-2 lag &gt; 90s</span>
+                <span style="display:flex;gap:12px;align-items:center;">
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">firing 1h 58m</span>
+                  <span class="grafana-link">↗</span>
+                </span>
+              </div>
+              <div class="alert-sub-row">
+                <span><strong>HighJobLag</strong> — enrichment-worker-3 lag &gt; 90s</span>
+                <span style="display:flex;gap:12px;align-items:center;">
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">firing 2h 3m</span>
+                  <span class="grafana-link">↗</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info group -->
+          <div class="alert-group info">
+            <div class="alert-row">
+              <div class="alert-left">
+                <span class="severity-badge info">info</span>
+                <span class="alert-service">auth-service</span>
+                <span class="alert-summary">Elevated login latency — p99 &gt; 800ms</span>
+              </div>
+              <div class="alert-right">
+                <span class="alert-duration">firing 6m</span>
+                <span class="grafana-link">View in Grafana ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: HEALTHY -->
+        <div class="state-panel" id="state-healthy">
+          <div class="panel-label">alert panel — healthy</div>
+          <div class="healthy-panel">
+            <div class="healthy-left">
+              <div class="healthy-icon">✓</div>
+              <div>
+                <div class="healthy-text">No active alerts — all systems healthy</div>
+                <div class="healthy-sub">Last checked: 14:22:07</div>
+              </div>
+            </div>
+            <div class="healthy-right">
+              ↻ refreshing in 60s
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: LOADING -->
+        <div class="state-panel" id="state-loading">
+          <div class="panel-label">alert panel — loading (skeleton)</div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row" style="animation-delay:0.15s;opacity:0.7;"></div>
+          <div class="skeleton-row" style="animation-delay:0.3s;opacity:0.5;"></div>
+        </div>
+
+        <!-- STATE: ERROR -->
+        <div class="state-panel" id="state-error">
+          <div class="panel-label">alert panel — error</div>
+          <div class="error-panel">
+            <div class="error-header">
+              <span class="error-icon">⚠</span>
+              <span class="error-title">Unable to reach alerting service</span>
+            </div>
+            <div class="error-detail">Alertmanager 503: Service Unavailable</div>
+            <div class="error-footer">
+              <span class="error-time">Last successful check: 14:18:42</span>
+              <button class="retry-btn">↻ Retry</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Rest of dashboard ── -->
+      <div class="divider">Platform Overview</div>
+
+      <div class="page-grid">
+        <!-- Node health -->
+        <div class="widget">
+          <div class="widget-title">Node Health</div>
+          <div class="metric-val">12<span class="metric-unit">/ 12</span></div>
+          <div class="metric-delta up">↑ all nodes ready</div>
+          <div class="bar-chart" style="margin-top:14px;">
+            <div class="bar-row">
+              <div class="bar-label">CPU</div>
+              <div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--green);"></div></div>
+              <div class="bar-pct">42%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Memory</div>
+              <div class="bar-track"><div class="bar-fill" style="width:67%;background:var(--amber);"></div></div>
+              <div class="bar-pct">67%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Disk</div>
+              <div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--green);"></div></div>
+              <div class="bar-pct">28%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pod status -->
+        <div class="widget">
+          <div class="widget-title">Pod Status</div>
+          <div class="metric-val">148<span class="metric-unit">running</span></div>
+          <div class="metric-delta flat">2 pending · 0 failed</div>
+          <div class="bar-chart" style="margin-top:14px;">
+            <div class="bar-row">
+              <div class="bar-label">Running</div>
+              <div class="bar-track"><div class="bar-fill" style="width:98%;background:var(--green);"></div></div>
+              <div class="bar-pct">148</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Pending</div>
+              <div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--amber);"></div></div>
+              <div class="bar-pct">2</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Failed</div>
+              <div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="bar-pct">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline health -->
+        <div class="widget">
+          <div class="widget-title">Pipeline Ingest</div>
+          <div class="metric-val">98.4<span class="metric-unit">%</span></div>
+          <div class="metric-delta up">↑ 0.3% vs yesterday</div>
+          <div class="bar-chart" style="margin-top:14px;">
+            <div class="bar-row">
+              <div class="bar-label">Throughput</div>
+              <div class="bar-track"><div class="bar-fill" style="width:84%;background:var(--blue);"></div></div>
+              <div class="bar-pct">84%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Error rate</div>
+              <div class="bar-track"><div class="bar-fill" style="width:16%;background:var(--red);"></div></div>
+              <div class="bar-pct">2.1%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Lag</div>
+              <div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--amber);"></div></div>
+              <div class="bar-pct">92s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<script>
+  // Clock
+  function tick() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('en-CA', { hour12: false });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // State switcher
+  function showState(state) {
+    document.querySelectorAll('.state-panel').forEach(p => p.classList.remove('visible'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('state-' + state).classList.add('visible');
+    event.target.classList.add('active');
+
+    const countEl   = document.getElementById('panel-count');
+    const refreshEl = document.getElementById('panel-refresh');
+
+    if (state === 'firing') {
+      countEl.textContent = '3 active issues';
+      countEl.style.display = '';
+      refreshEl.textContent = '↻ refreshes in 60s';
+    } else if (state === 'healthy') {
+      countEl.style.display = 'none';
+      refreshEl.textContent = '↻ refreshes in 60s';
+    } else if (state === 'loading') {
+      countEl.style.display = 'none';
+      refreshEl.textContent = 'loading…';
+    } else if (state === 'error') {
+      countEl.style.display = 'none';
+      refreshEl.textContent = 'last attempt: 14:18:42';
+    }
+  }
+
+  // Expand/collapse sub-rows
+  function toggleExpand(btn) {
+    const group = btn.closest('.alert-group');
+    const subRows = group.querySelector('.alert-sub-rows');
+    if (!subRows) return;
+    const isOpen = subRows.style.display !== 'none';
+    subRows.style.display = isOpen ? 'none' : 'block';
+    btn.textContent = isOpen ? '▼ +2 more' : '▲ collapse';
+  }
+</script>
+</body>
+</html>

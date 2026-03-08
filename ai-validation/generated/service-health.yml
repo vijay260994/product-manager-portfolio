@@ -1,0 +1,25 @@
+# ==============================================================================
+# service-health.yml
+# Generated from: PRD-PLATFORM-001 v0.1 — Alert Rule Sample section
+# Generator:      Claude Sonnet — fresh run, PRD as sole input
+# Date:           March 2026
+# OQ-3:           Confirm whether existing rules should be inherited before
+#                 expanding this file — see Open Questions
+# ==============================================================================
+
+groups:
+  - name: service-health
+    rules:
+
+      # Taken verbatim from PRD Alert Rule Sample section
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+          / sum(rate(http_requests_total[5m])) by (service) > 0.02
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          # S-1: generatorURL is auto-populated by Prometheus.
+          #      Add a grafana_dashboard annotation here once dashboard ID is confirmed.

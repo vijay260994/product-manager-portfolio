@@ -1,0 +1,46 @@
+# ==============================================================================
+# alertmanager.yml — Grouping, routing, inhibition config
+# Generated from: PRD-PLATFORM-001 v0.1 — M-1, S-3
+# Generator:      Claude Sonnet — fresh run, PRD as sole input
+# Date:           March 2026
+# OQ-1: Confirm Alertmanager is accessible from SysAdmin UI's auth/network context
+# OQ-2: Confirm Loki → Grafana → Alertmanager routing before relying on M-4
+# ==============================================================================
+
+global:
+  resolve_timeout: 5m
+
+route:
+  # M-1: group_by service so /api/v2/alerts/groups returns clean service-level grouping
+  group_by:        ['alertname', 'service']
+  group_wait:      30s
+  group_interval:  5m
+  repeat_interval: 12h
+  receiver:        'platform-null'   # v1: read-only via API, no external notifications
+
+  routes:
+    # Surface critical alerts faster
+    - match:
+        severity: critical
+      receiver:   'platform-null'
+      group_wait: 10s
+
+receivers:
+  - name: 'platform-null'
+    # v1: No notification config — alerts visible via API panel only (read-only)
+    # v2 TODO: add slack_configs / pagerduty_configs / email_configs here
+
+inhibit_rules:
+  # S-3: suppress pod-level alerts when the root-cause node alert is already firing
+  - source_match:
+      alertname: 'NodeDown'
+    target_match_re:
+      alertname: 'PodCrashLooping|PodOOMKilled'
+    equal: ['node']
+
+  # S-3: suppress warnings when critical is already firing on the same service
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['service']
