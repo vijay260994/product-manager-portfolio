@@ -1,6 +1,6 @@
 # PRD: SysAdmin Health Alert Panel
 > **AI-Native PRD** — Structured for both human review and AI-assisted implementation.
-> Requirements carry stable IDs, acceptance criteria are written as testable conditions,
+> Requirements carry IDs, acceptance criteria are written as testable conditions,
 > and code samples are illustrative. A full implementation spec can be generated from this document.
 
 ---
